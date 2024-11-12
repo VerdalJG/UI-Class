@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerHealthBar.generated.h"
 
+class UProgressBar;
+
 /**
  * 
  */
@@ -22,17 +24,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Hide();
 
-protected:
+	void UpdatePlayerHealthBar(int NewHealth, int MaxHealth);
 
+
+
+protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UProgressBar> PlayerHealthBar;
+
 private:
+	void LowHealthBlink(float DeltaTime);
 
 	float BlinkTimer = 0.f;
 	bool bIsLowHealth = false;
 	bool bBlinkTurningRed = true;
 
-	void UpdatePlayerHealthBar(int NewHealth, int MaxHealth);
 
-	void LowHealthBlink();
 };

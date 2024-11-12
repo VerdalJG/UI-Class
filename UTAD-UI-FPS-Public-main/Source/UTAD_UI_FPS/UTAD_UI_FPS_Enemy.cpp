@@ -13,6 +13,22 @@ void AUTAD_UI_FPS_Enemy::BeginPlay()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Super::BeginPlay();
+
+	TArray<UActorComponent*> actorComponents = GetComponentsByClass(UWidgetComponent::StaticClass());
+	for (UActorComponent* component : actorComponents)
+	{
+		if (UWidgetComponent* widgetComponent = Cast<UWidgetComponent>(component))
+		{
+			UUserWidget* widget = widgetComponent->GetWidget();
+			if (UEnemyHealthBar* enemyHPWidget = Cast<UEnemyHealthBar>(widget))
+			{
+				HPWidget = enemyHPWidget;
+				OnEnemyHealthChanged.AddDynamic(HPWidget, &UEnemyHealthBar::UpdateEnemyHealthBarValue);
+			}
+		}
+	}
+
+	OnEnemyHealthChanged.Broadcast(Health, MaxHealth);
 }
 
 void AUTAD_UI_FPS_Enemy::Tick(float DeltaSeconds)
@@ -27,6 +43,7 @@ void AUTAD_UI_FPS_Enemy::SetHealth(int NewHealth)
 	{
 		Destroy();
 	}
+	OnEnemyHealthChanged.Broadcast(Health, MaxHealth);
 }
 
 int AUTAD_UI_FPS_Enemy::GetHealth()

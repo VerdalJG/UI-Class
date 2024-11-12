@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "AmmoCounter.generated.h"
 
+class UTextBlock;
+
 /**
  * 
  */
@@ -21,9 +23,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Hide();
 
-private:
-
 	void UpdateCurrentAmmo(int NewCurrentAmmo);
 
 	void UpdateTotalAmmo(int NewTotalAmmo);
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UTextBlock> CurrentAmmo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UTextBlock> TotalAmmo;
 };

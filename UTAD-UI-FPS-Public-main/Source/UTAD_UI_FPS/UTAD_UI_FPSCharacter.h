@@ -45,19 +45,23 @@ class AUTAD_UI_FPSCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
-
 	
 public:
 	AUTAD_UI_FPSCharacter();
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
 public:
 		
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
+
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SkillTreeAction;
 
 	/** Current Health */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stats)
@@ -128,6 +132,8 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void OpenSkillTree(const FInputActionValue& Value);
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -148,6 +154,6 @@ private:
 	/****************************************************/
 
 	/** Instances that will be created and showed on viewport */
-	UPlayerHUD* PlayerHUDInstance;
+	TObjectPtr<UPlayerHUD> PlayerHUDInstance;
 };
 

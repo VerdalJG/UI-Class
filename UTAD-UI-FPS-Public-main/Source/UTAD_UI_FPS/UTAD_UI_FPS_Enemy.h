@@ -6,7 +6,9 @@
 #include "Engine/StaticMeshActor.h"
 #include "UTAD_UI_FPS_Enemy.generated.h"
 
-class UWidgetComponent;
+class UEnemyHealthBar;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyHealthChangedSignature, int, Health, int, MaxHealth);
 
 /**
  * 
@@ -43,6 +45,11 @@ public:
 	/** Getter for the int */
 	UFUNCTION(BlueprintCallable, Category = Stats)
 	int GetMaxHealth();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "UI")
+	UEnemyHealthBar* HPWidget;
+
+	FOnEnemyHealthChangedSignature OnEnemyHealthChanged;
 
 protected:
 

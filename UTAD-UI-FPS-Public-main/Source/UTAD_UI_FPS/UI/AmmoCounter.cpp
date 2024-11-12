@@ -18,10 +18,10 @@ void UAmmoCounter::Hide()
 
 void UAmmoCounter::UpdateCurrentAmmo(int NewCurrentAmmo)
 {
-
+	CurrentAmmo.Get()->SetText(FText::AsNumber(NewCurrentAmmo));
 }
 
 void UAmmoCounter::UpdateTotalAmmo(int NewTotalAmmo)
 {
-
+	TotalAmmo.Get()->SetText(FText::AsNumber(NewTotalAmmo));
 }

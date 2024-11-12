@@ -16,7 +16,7 @@ void UReloadBar::Hide()
 	SetVisibility(ESlateVisibility::Hidden);
 }
 
-void UReloadBar::UpdateReloadBarValue(float NewValue)
+void UReloadBar::UpdateReloadBar(float NewValue)
 {
-
+	ReloadProgressBar->SetPercent(NewValue);
 }

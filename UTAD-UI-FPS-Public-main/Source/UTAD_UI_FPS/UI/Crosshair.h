@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Crosshair.generated.h"
 
+class UImage;
+
 /**
  * 
  */
@@ -21,4 +23,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Hide();
+
+	void UpdateCrosshair(bool EnemyInSight);
+	void ActivateFireAnimation();
+
+	float AnimationTimer;
+	const float AnimationLength = 0.1f;
+	bool IsFiring;
+
+protected:
+	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+private:
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	TObjectPtr<UImage> Crosshair;
 };

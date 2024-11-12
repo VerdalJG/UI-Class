@@ -28,6 +28,7 @@ void UTP_WeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	if (bIsReloading)
 	{
 		ReloadTimer += DeltaTime;
+		OnReload.Broadcast(ReloadTimer);
 		// To test ReloadTimer
 		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), ReloadTimer));
 	}
@@ -83,6 +84,10 @@ void UTP_WeaponComponent::Fire()
 	}
 
 	--CurrentNumBullets;
+	OnCurrentAmmoChange.Broadcast(CurrentNumBullets);
+	ReloadTimer = 0.0f;
+	OnReload.Broadcast(ReloadTimer);
+	OnFire.Broadcast();
 }
 
 void UTP_WeaponComponent::StartReload()
@@ -118,7 +123,13 @@ void UTP_WeaponComponent::CompleteReload()
 
 	CurrentNumBullets = __min(MagazineSize, playerBullets);
 
-	Character->SetTotalBullets(playerBullets - CurrentNumBullets);
+	int totalBullets = playerBullets - CurrentNumBullets;
+
+	Character->SetTotalBullets(totalBullets);
+	OnCurrentAmmoChange.Broadcast(CurrentNumBullets);
+	OnTotalAmmoChange.Broadcast(totalBullets);
+	ReloadTimer = 0.0f;
+	OnReload.Broadcast(ReloadTimer);
 }
 
 void UTP_WeaponComponent::CancelReload()
@@ -129,6 +140,9 @@ void UTP_WeaponComponent::CancelReload()
 	}
 
 	bIsReloading = false;
+
+	ReloadTimer = 0.f;
+	OnReload.Broadcast(ReloadTimer);
 }
 
 int UTP_WeaponComponent::GetMagazineSize()
@@ -192,6 +206,10 @@ void UTP_WeaponComponent::AttachWeapon(AUTAD_UI_FPSCharacter* TargetCharacter)
 			EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Canceled, this, &UTP_WeaponComponent::CancelReload);
 		}
 	}
+	// Update values when the weapon is picked up
+	OnCurrentAmmoChange.Broadcast(CurrentNumBullets);
+	OnTotalAmmoChange.Broadcast(Character->GetTotalBullets());
+	OnReload.Broadcast(ReloadTimer);
 }
 
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)

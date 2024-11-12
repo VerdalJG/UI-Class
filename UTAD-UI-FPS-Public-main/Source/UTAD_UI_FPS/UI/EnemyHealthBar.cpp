@@ -7,5 +7,6 @@
 
 void UEnemyHealthBar::UpdateEnemyHealthBarValue(int Value, int MaxValue)
 {
-
+	float percent = static_cast<float>(Value) / MaxValue;
+	EnemyHealthBar.Get()->SetPercent(percent);
 }

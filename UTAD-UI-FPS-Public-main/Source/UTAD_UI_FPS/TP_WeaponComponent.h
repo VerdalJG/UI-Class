@@ -6,6 +6,12 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "TP_WeaponComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTotalAmmoChange, int, newTotalAmmo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentAmmoChange, int, newCurrentAmmo);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnReload, float, percent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFire);
+
 class AUTAD_UI_FPSCharacter;
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -90,6 +96,11 @@ public:
 	/** Setter for CurrentNumBullets */
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void SetCurrentNumBullets(int NewCurrentNumBullets);
+
+	FOnCurrentAmmoChange OnCurrentAmmoChange;
+	FOnTotalAmmoChange OnTotalAmmoChange;
+	FOnReload OnReload;
+	FOnFire OnFire;
 
 protected:
 	/** Ends gameplay for this component. */
